@@ -24,7 +24,8 @@ export const ROUTE_CONFIG: Record<string, IRoute> = {
     },
     [ROUTE_KEY.MY]: {
         path: 'my',
-        name: '我的',
+        name: '个人信息',
+        hideInMenu: true,
         icon: <HomeOutlined />,
     },
     [ROUTE_KEY.NOTFOUND]: {

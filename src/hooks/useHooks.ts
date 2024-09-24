@@ -9,8 +9,8 @@ export const useGetUser = () => {
     const { loading, refetch } = useQuery<{ getUserInfo: UserStateType }>(GET_USER, {
         onCompleted: data => {
             if (data.getUserInfo) {
-                const { id, name, tel } = data.getUserInfo
-                dispatch(setUserInfo({ id, name, tel }))
+                const { id, name, tel, desc, avatar } = data.getUserInfo
+                dispatch(setUserInfo({ id, name, tel, desc, avatar }))
                 return
             }
             if (window.location.pathname !== '/login') {

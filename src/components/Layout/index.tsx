@@ -1,9 +1,12 @@
 import React, { FC } from 'react'
-import { ProLayout, PageContainer, MenuDataItem } from '@ant-design/pro-components'
+import { Space } from 'antd'
+import { ProLayout, MenuDataItem } from '@ant-design/pro-components'
+import { LogoutOutlined } from '@ant-design/icons'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import useGetUserInfo from '@/hooks/useGetUserInfo'
-import { routes } from '@/router/menu'
+import { routes, ROUTE_KEY } from '@/router/menu'
 import { AUTH_TOKEN } from '@/utils/constants'
+import useGoTo from '@/hooks/useGoTo'
 
 const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
     <Link to={item.path || '/'}>{dom}</Link>
@@ -11,6 +14,7 @@ const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
 const Layout: FC = () => {
     const userInfo = useGetUserInfo()
     const nav = useNavigate()
+    const { go } = useGoTo()
 
     const logout = () => {
         console.log(1)
@@ -24,19 +28,22 @@ const Layout: FC = () => {
         <ProLayout
             layout="mix"
             siderWidth={130}
-            avatarProps={{
-                src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-                title: userInfo.tel,
-                size: 'small',
-                onClick: logout,
-            }}
             title={false}
-            logo={
-                <img
-                    alt=""
-                    src="https://water-drop-server-assets.oss-cn-hangzhou.aliyuncs.com/images/1725899700347.jpeg?Expires=1726593187&OSSAccessKeyId=TMP.3KiHr3tuFs7QGSbyyZwPszCoTAtXQ6mhFriiB8dBZbZi3H9eeytvv6pWFpTTwaGYpwDbQTU1AuZ6ZqtAmmTbPCykQLUSxF&Signature=kYoYn8lrmemtQN9VOO8UL34ss18%3D"
-                />
-            }
+            avatarProps={{
+                src:
+                    userInfo.avatar ||
+                    'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+                title: userInfo.name,
+                size: 'small',
+                onClick: () => go(ROUTE_KEY.MY),
+            }}
+            links={[
+                <Space size={20} onClick={logout}>
+                    <LogoutOutlined />
+                    退出
+                </Space>,
+            ]}
+            logo={<img alt="" src="" />}
             route={{
                 path: '/',
                 routes,
@@ -44,9 +51,7 @@ const Layout: FC = () => {
             menuItemRender={menuItemRender}
             onMenuHeaderClick={() => nav('/')}
         >
-            <PageContainer>
-                <Outlet />
-            </PageContainer>
+            <Outlet />
         </ProLayout>
     )
 }
