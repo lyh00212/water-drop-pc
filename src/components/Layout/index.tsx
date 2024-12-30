@@ -28,12 +28,12 @@ const Layout: FC = () => {
         <ProLayout
             layout="mix"
             siderWidth={130}
-            title={false}
+            title={'liumou'}
             avatarProps={{
                 src:
                     userInfo.avatar ||
                     'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-                title: userInfo.name,
+                title: userInfo.tel,
                 size: 'small',
                 onClick: () => go(ROUTE_KEY.MY),
             }}
@@ -43,9 +43,9 @@ const Layout: FC = () => {
                     退出
                 </Space>,
             ]}
-            logo={<img alt="" src="" />}
+            // logo={<img alt="" src="" />}
             route={{
-                path: '/',
+                path: '/home',
                 routes,
             }}
             menuItemRender={menuItemRender}

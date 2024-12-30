@@ -22,6 +22,7 @@ const OSSImageUpload = ({ value, onChange }: OSSUploadProps) => {
     const key = useRef('')
     const { data, refetch } = useQuery<{ getOSSInfo: OSSDataType }>(GET_OSS_INFO)
     const OSSData = data?.getOSSInfo
+    console.log(OSSData, 'ossdata-------')
 
     const handleChange: UploadProps['onChange'] = ({ file }) => {
         if (file.status === 'removed') {

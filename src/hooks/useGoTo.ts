@@ -14,7 +14,7 @@ const useGoTo = () => {
         const route = getRouteByKey(pageKey)
         if (route && route.path) {
             if (!params) {
-                nav(`${route.path}`)
+                nav(`/${route.path}`)
                 return
             }
             const url = route.path.replace(
