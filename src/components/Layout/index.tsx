@@ -27,7 +27,7 @@ const Layout: FC = () => {
     return (
         <ProLayout
             layout="mix"
-            siderWidth={130}
+            siderWidth={150}
             title={'liumou'}
             avatarProps={{
                 src:

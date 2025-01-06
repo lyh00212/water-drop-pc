@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import type { UploadFile, UploadProps } from 'antd'
 import { Upload } from 'antd'
 import { useQuery } from '@apollo/client'
@@ -15,36 +15,34 @@ interface OSSDataType {
 }
 
 interface OSSUploadProps {
-    value?: UploadFile
-    onChange?: (file?: UploadFile) => void
+    value?: UploadFile[]
+    label: string
+    maxCount?: number
+    imgCropAspect?: number
+    onChange?: (files: UploadFile[]) => void
 }
-const OSSImageUpload = ({ value, onChange }: OSSUploadProps) => {
-    const key = useRef('')
+const OSSImageUpload = ({ label, value, maxCount, imgCropAspect, onChange }: OSSUploadProps) => {
     const { data, refetch } = useQuery<{ getOSSInfo: OSSDataType }>(GET_OSS_INFO)
     const OSSData = data?.getOSSInfo
     console.log(OSSData, 'ossdata-------')
+    const getKey = (file: UploadFile) => {
+        const suffix = file.name.slice(file.name.lastIndexOf('.'))
+        const key = `${OSSData?.dir}${file.uid}${suffix}`
+        const url = `${OSSData?.host}/${key}`
+        return { key, url }
+    }
 
-    const handleChange: UploadProps['onChange'] = ({ file }) => {
-        if (file.status === 'removed') {
-            onChange?.()
-            return
-        }
-        const newFile = {
-            ...file,
-            url: `${OSSData?.host}/${key.current}`,
-        }
-        console.log(newFile, '---------')
-
-        onChange?.(newFile)
+    const handleChange: UploadProps['onChange'] = ({ fileList }) => {
+        const files = fileList.map(f => ({
+            ...f,
+            url: f.url || getKey(f).url,
+        }))
+        onChange?.(files)
     }
 
     const getExtraData: UploadProps['data'] = file => {
-        const suffix = file.name.slice(file.name.lastIndexOf('.'))
-        const filename = Date.now() + suffix
-        key.current = `${OSSData?.dir}${filename}`
-
         return {
-            key: key.current,
+            key: getKey(file).key,
             OSSAccessKeyId: OSSData?.accessId,
             policy: OSSData?.policy,
             Signature: OSSData?.signature,
@@ -65,23 +63,27 @@ const OSSImageUpload = ({ value, onChange }: OSSUploadProps) => {
     }
 
     return (
-        <ImgCrop rotationSlider>
+        <ImgCrop rotationSlider aspect={imgCropAspect}>
             <Upload
                 name="file"
+                maxCount={maxCount}
                 listType="picture-card"
-                fileList={value ? [value] : []}
+                fileList={value}
                 action={OSSData?.host}
                 onChange={handleChange}
                 data={getExtraData}
                 beforeUpload={beforeUpload}
             >
-                + 替换头像
+                {label}
             </Upload>
         </ImgCrop>
     )
 }
-// OSSImageUpload.defaultProps = {
-//     values: null,
-//     onChange: () => {},
-// }
+OSSImageUpload.defaultProps = {
+    values: null,
+    label: '上传图片',
+    maxCount: 1,
+    imgCropAspect: 1 / 1,
+    onChange: () => {},
+}
 export default OSSImageUpload
