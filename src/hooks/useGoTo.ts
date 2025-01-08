@@ -6,7 +6,7 @@ import { getRouteByKey, routes } from '@/router/menu'
 const useGoTo = () => {
     const nav = useNavigate()
     const back = () => nav(-1)
-    const go = (pageKey: string, params?: Record<string, string | number>) => {
+    const go = (pageKey?: string, params?: Record<string, string | number>) => {
         if (!pageKey) {
             nav('/')
             return

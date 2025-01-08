@@ -1,12 +1,13 @@
 import React, { FC } from 'react'
-import { Space } from 'antd'
+import { Space, Tooltip } from 'antd'
 import { ProLayout, MenuDataItem } from '@ant-design/pro-components'
-import { LogoutOutlined } from '@ant-design/icons'
+import { LogoutOutlined, ShopOutlined } from '@ant-design/icons'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import useGetUserInfo from '@/hooks/useGetUserInfo'
 import { routes, ROUTE_KEY } from '@/router/menu'
 import { AUTH_TOKEN } from '@/utils/constants'
 import useGoTo from '@/hooks/useGoTo'
+import OrgSelect from '../OrgSelect'
 
 const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
     <Link to={item.path || '/'}>{dom}</Link>
@@ -17,11 +18,13 @@ const Layout: FC = () => {
     const { go } = useGoTo()
 
     const logout = () => {
-        console.log(1)
-
         sessionStorage.setItem(AUTH_TOKEN, '')
         localStorage.setItem(AUTH_TOKEN, '')
         nav('/login')
+    }
+
+    const goToOrg = () => {
+        go(ROUTE_KEY.ORG)
     }
 
     return (
@@ -48,6 +51,12 @@ const Layout: FC = () => {
                 path: '/home',
                 routes,
             }}
+            actionsRender={() => [
+                <OrgSelect />,
+                <Tooltip title="门店管理">
+                    <ShopOutlined onClick={goToOrg} />
+                </Tooltip>,
+            ]}
             menuItemRender={menuItemRender}
             onMenuHeaderClick={() => nav('/')}
         >
