@@ -1,3 +1,4 @@
+import { currentOrg } from '@/utils'
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { AUTH_TOKEN } from './constants'
@@ -12,6 +13,7 @@ const authLink = setContext((_, { headers }) => {
         headers: {
             ...headers,
             Authorization: token ? `Bearer ${token}` : '',
+            orgId: currentOrg()?.value,
         },
     }
 })
@@ -20,6 +22,13 @@ const authLink = setContext((_, { headers }) => {
 export const client = new ApolloClient({
     // uri: 'http://localhost:3000/graphql',
     link: authLink.concat(httpLink),
+    defaultOptions: {
+        watchQuery: {
+            fetchPolicy: 'no-cache',
+        },
+    },
     // 加cache缓存
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+        addTypename: false,
+    }),
 })
