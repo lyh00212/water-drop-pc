@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate, matchPath } from 'react-router-dom'
-import { getRouteByKey, routes } from '@/router/menu'
+import { getRouteByKey, ROUTE_CONFIG, ROUTE_KEY, routes } from '@/router/menu'
 
 // 通用页面跳转器
 const useGoTo = () => {
@@ -36,7 +36,15 @@ export default useGoTo
 export const useMatchedRoute = () => {
     const r = useLocation()
     const route = useMemo(() => {
-        routes.find(item => matchPath(item.path, r.pathname))
+        return routes.find(item => matchPath(`/${item.path}`, r.pathname)) || null
     }, [r.pathname])
     return route
+}
+
+export const useIsOrgRoute = () => {
+    const curRoute = useMatchedRoute()
+    if (!curRoute) {
+        return false
+    }
+    return curRoute.path === ROUTE_CONFIG[ROUTE_KEY.ORG].path
 }

@@ -4,9 +4,10 @@ import { ProLayout, MenuDataItem } from '@ant-design/pro-components'
 import { LogoutOutlined, ShopOutlined } from '@ant-design/icons'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import useGetUserInfo from '@/hooks/useGetUserInfo'
+import useGetOrgInfo from '@/hooks/useGetOrgInfo'
 import { routes, ROUTE_KEY } from '@/router/menu'
 import { AUTH_TOKEN } from '@/utils/constants'
-import useGoTo from '@/hooks/useGoTo'
+import useGoTo, { useIsOrgRoute } from '@/hooks/useGoTo'
 import OrgSelect from '../OrgSelect'
 
 const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
@@ -14,7 +15,9 @@ const menuItemRender = (item: MenuDataItem, dom: React.ReactNode) => (
 )
 const Layout: FC = () => {
     const userInfo = useGetUserInfo()
+    const orgInfo = useGetOrgInfo()
     const nav = useNavigate()
+    const isOrg = useIsOrgRoute()
     const { go } = useGoTo()
 
     const logout = () => {
@@ -52,7 +55,7 @@ const Layout: FC = () => {
                 routes,
             }}
             actionsRender={() => [
-                <OrgSelect />,
+                !isOrg && <OrgSelect />,
                 <Tooltip title="门店管理">
                     <ShopOutlined onClick={goToOrg} />
                 </Tooltip>,
@@ -60,7 +63,9 @@ const Layout: FC = () => {
             menuItemRender={menuItemRender}
             onMenuHeaderClick={() => nav('/')}
         >
-            <Outlet />
+            <div key={orgInfo.currentOrg}>
+                <Outlet />
+            </div>
         </ProLayout>
     )
 }
