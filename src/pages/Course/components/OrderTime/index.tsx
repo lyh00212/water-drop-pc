@@ -33,7 +33,7 @@ const OrderTime = ({ onClose, id }: IProps) => {
     } = useOrderTime(id, currentDay.key)
 
     return (
-        <Drawer title="编辑预约时间" width={720} open onClose={() => onClose()} forceRender>
+        <Drawer title="编辑预约时间" width={720} open onClose={() => onClose()}>
             <Tabs type="card" items={DAYS} onChange={onTabChangeHandler} />
             <EditableProTable<IOrderTime>
                 headerTitle={
@@ -64,6 +64,9 @@ const OrderTime = ({ onClose, id }: IProps) => {
                         }
                         newData = [...orderTime, _.omit(d, 'index')]
                         onSaveHandler(newData)
+                    },
+                    onDelete: async key => {
+                        onDeleteHandler(key as number)
                     },
                 }}
             />

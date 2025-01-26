@@ -103,3 +103,14 @@ export type TCoursesQuery = {
 export type TCourseQuery = { [key: string]: { __typename?: 'Query'; data: ICourse; page: IPage } }
 
 export type TBaseCourse = Partial<ICourse>
+
+export interface ICard {
+    id: string
+    name: string
+    type: string
+    time: number
+    validateDay: number
+}
+export type TCardsQuery = {
+    [key: string]: { __typename?: 'Query'; data: ICard[]; page: IPage }
+}
