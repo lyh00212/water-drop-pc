@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { COMMIT_CARD, DELETE_CARD, GET_CARDS } from '@/graphql/card'
 import { ICard } from '@/utils/types'
-import { useMutation, useQuery } from '@apollo/client'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { message } from 'antd'
 
 export const useCards = (courseId: string) => {
@@ -14,6 +14,23 @@ export const useCards = (courseId: string) => {
         loading,
         data: data?.getCards.data,
         refetch,
+    }
+}
+
+// 设置lazy，需要手动触发
+export const useLazyCards = () => {
+    const [get, { data, loading }] = useLazyQuery(GET_CARDS)
+    const getCards = (courseId: string) => {
+        get({
+            variables: {
+                courseId,
+            },
+        })
+    }
+    return {
+        loading,
+        data: data?.getCards.data,
+        getCards,
     }
 }
 

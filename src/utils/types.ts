@@ -110,7 +110,40 @@ export interface ICard {
     type: string
     time: number
     validateDay: number
+    course: ICourse
 }
 export type TCardsQuery = {
     [key: string]: { __typename?: 'Query'; data: ICard[]; page: IPage }
 }
+
+export interface IValue {
+    label: string
+    value: string
+}
+
+export interface IProduct {
+    id: string
+    name: string
+    desc: string
+    stock: number
+    limitBuyNumber: number
+    coverUrl?: string
+    status?: string
+    bannerUrl?: string
+    originalPrice: number
+    preferentialPrice: number
+    cards: ICard[]
+}
+export interface IProductType {
+    key: string
+    title: string
+}
+export type TProductsQuery = {
+    [key: string]: { __typename?: 'Query'; data: IProduct[]; page: IPage }
+}
+
+export type TProductQuery = { [key: string]: { __typename?: 'Query'; data: IProduct } }
+
+export type TProductTypeQuery = { [key: string]: { __typename?: 'Query'; data: IProductType[] } }
+
+export type TBaseProduct = Partial<IProduct>

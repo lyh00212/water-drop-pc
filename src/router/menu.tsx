@@ -17,6 +17,7 @@ export const ROUTE_KEY = {
     COURSE: 'course',
     STUDENT: 'student',
     NO_ORG: 'noOrg',
+    PRODUCT: 'product',
     NOTFOUND: 'notfound',
 }
 
@@ -31,6 +32,11 @@ export const ROUTE_CONFIG: Record<string, IRoute> = {
         name: '个人信息',
         hideInMenu: true,
         icon: <HomeOutlined />,
+    },
+    [ROUTE_KEY.PRODUCT]: {
+        path: 'product',
+        name: '商品管理',
+        icon: <TeamOutlined />,
     },
     [ROUTE_KEY.ORG]: {
         path: 'org',
